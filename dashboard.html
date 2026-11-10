@@ -1,0 +1,303 @@
+<!doctype html>
+<html lang="en" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>DevDesk Dashboard — Interactive App Workspace</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <style>
+      body {
+        font-family: 'Plus Jakarta Sans', sans-serif;
+      }
+    </style>
+  </head>
+  <body class="bg-slate-950 text-slate-100 antialiased selection:bg-cyan-500 selection:text-white flex min-h-screen">
+    <!-- Sidebar Navigation -->
+    <aside class="w-64 bg-slate-900/90 border-r border-slate-800 flex flex-col justify-between hidden md:flex shrink-0">
+      <div>
+        <!-- Sidebar Header / Logo -->
+        <div class="h-20 flex items-center px-6 border-b border-slate-800/80">
+          <a href="index.html" class="flex items-center space-x-3 group">
+            <div class="w-20 h-20 flex items-center justify-center p-1 shadow-md group-hover:border-cyan-500/50 transition-all">
+              <img
+                src="devdes-transparent.png"
+                alt="DevDesk Logo"
+                class="w-full h-full object-contain"
+                onerror="this.src = 'data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 100 100\'><text y=\'70\' font-size=\'70\' fill=\'%2300A3FF\'>&lt;/&gt;</text></svg>'"
+              />
+            </div>
+            <span class="text-xl font-extrabold tracking-tight text-white">Dev<span class="text-cyan-400">Desk</span></span>
+          </a>
+        </div>
+
+        <!-- Navigation Links (Dynamic Tabs) -->
+        <nav class="p-4 space-y-1 text-sm font-medium">
+          <button onclick="switchTab('tab-dashboard', this)" class="nav-btn w-full flex items-center space-x-3 px-4 py-3 rounded-xl bg-cyan-500/10 text-cyan-400 font-semibold border border-cyan-500/20 text-left transition-all">
+            <span class="text-lg">📊</span>
+            <span>Dashboard</span>
+          </button>
+          <button onclick="switchTab('tab-projects', this)" class="nav-btn w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800/60 text-left transition-all">
+            <span class="text-lg">📁</span>
+            <span>Active Projects</span>
+          </button>
+          <button onclick="switchTab('tab-milestones', this)" class="nav-btn w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800/60 text-left transition-all">
+            <span class="text-lg">🎯</span>
+            <span>Milestones</span>
+          </button>
+          <button onclick="switchTab('tab-invoices', this)" class="nav-btn w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800/60 text-left transition-all">
+            <span class="text-lg">💳</span>
+            <span>Invoices & QRIS</span>
+          </button>
+          <button onclick="switchTab('tab-escrow', this)" class="nav-btn w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800/60 text-left transition-all">
+            <span class="text-lg">🔒</span>
+            <span>Escrow Vault</span>
+          </button>
+          <button onclick="switchTab('tab-clients', this)" class="nav-btn w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800/60 text-left transition-all">
+            <span class="text-lg">👥</span>
+            <span>Clients</span>
+          </button>
+        </nav>
+      </div>
+
+      <!-- Sidebar User Profile -->
+      <div class="p-4 border-t border-slate-800">
+        <div class="flex items-center space-x-3 p-2 rounded-xl bg-slate-950 border border-slate-800">
+          <div class="w-9 h-9 rounded-lg bg-cyan-500 text-slate-950 font-bold flex items-center justify-center text-sm">MR</div>
+          <div class="overflow-hidden">
+            <p class="text-xs font-bold text-white truncate">Rizky Ramadhan</p>
+            <p class="text-[10px] text-slate-400 truncate">Agency Pro Plan ($15)</p>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <div class="flex-1 flex flex-col min-w-0 overflow-y-auto">
+      <!-- Header Bar -->
+      <header class="h-20 bg-slate-950/80 border-b border-slate-800/80 sticky top-0 z-40 backdrop-blur-md px-6 flex items-center justify-between">
+        <div class="flex items-center space-x-4">
+          <h1 id="page-title" class="text-xl font-bold text-white">Agency Dashboard</h1>
+          <span class="px-3 py-1 bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-xs font-semibold rounded-full flex items-center gap-1.5">
+            <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span> Escrow Active
+          </span>
+        </div>
+
+        <div class="flex items-center space-x-4">
+          <button onclick="alert('Creating new project workflow modal...')" class="px-4 py-2 bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-xs rounded-lg shadow-lg shadow-cyan-500/20 transition-all">+ New Project</button>
+          <a href="index.html" class="text-xs text-slate-400 hover:text-white transition-colors"> Back to Website ↗ </a>
+        </div>
+      </header>
+
+      <!-- Dynamic Body Content Sections -->
+      <main class="p-6 md:p-8 max-w-7xl">
+        <!-- 1. DASHBOARD TAB -->
+        <div id="tab-dashboard" class="tab-content space-y-8">
+          <div class="flex flex-col md:flex-row md:items-center justify-between p-6 rounded-2xl bg-gradient-to-r from-slate-900 via-slate-900 to-cyan-950/40 border border-slate-800 gap-4">
+            <div>
+              <h2 class="text-2xl font-extrabold text-white">Welcome back, Rizky! 👋</h2>
+              <p class="text-sm text-slate-400 mt-1">Here is your agency overview for active milestones and escrow protection.</p>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+            <div class="p-5 rounded-2xl bg-slate-900/60 border border-slate-800">
+              <p class="text-xs text-slate-400 font-medium">Active Projects</p>
+              <p class="text-2xl font-extrabold text-white mt-1">4 Projects</p>
+            </div>
+            <div class="p-5 rounded-2xl bg-slate-900/60 border border-slate-800">
+              <p class="text-xs text-slate-400 font-medium">Pending Escrow</p>
+              <p class="text-2xl font-extrabold text-amber-400 mt-1">Rp 12.500.000</p>
+            </div>
+            <div class="p-5 rounded-2xl bg-slate-900/60 border border-slate-800">
+              <p class="text-xs text-slate-400 font-medium">Total Processed</p>
+              <p class="text-2xl font-extrabold text-emerald-400 mt-1">Rp 48.200.000</p>
+            </div>
+            <div class="p-5 rounded-2xl bg-slate-900/60 border border-slate-800">
+              <p class="text-xs text-slate-400 font-medium">Platform Fee</p>
+              <p class="text-2xl font-extrabold text-slate-300 mt-1">1.5%</p>
+            </div>
+          </div>
+
+          <div class="bg-slate-900/60 border border-slate-800 rounded-2xl p-6 space-y-4">
+            <h3 class="text-lg font-bold text-white mb-2">Live Milestones Overview</h3>
+            <div class="p-4 rounded-xl bg-slate-950 border border-slate-800 flex justify-between items-center text-sm">
+              <div>
+                <p class="font-bold text-white">E-Commerce App (PT Mediatech)</p>
+                <p class="text-xs text-slate-400">Milestone 3: Backend Integration</p>
+              </div>
+              <span class="px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-400 text-xs font-semibold">Paid (Rp 4.000.000)</span>
+            </div>
+            <div class="p-4 rounded-xl bg-slate-950 border border-slate-800 flex justify-between items-center text-sm">
+              <div>
+                <p class="font-bold text-white">Laporan Keuangan Star Class</p>
+                <p class="text-xs text-slate-400">Milestone 2: Supabase API Integration</p>
+              </div>
+              <span class="px-3 py-1 rounded-full bg-amber-500/10 text-amber-400 text-xs font-semibold">Pending QRIS (Rp 2.500.000)</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2. ACTIVE PROJECTS TAB -->
+        <div id="tab-projects" class="tab-content hidden space-y-6">
+          <h2 class="text-xl font-bold text-white">All Active Client Projects</h2>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="p-6 rounded-2xl bg-slate-900/60 border border-slate-800 space-y-4">
+              <div class="flex justify-between items-start">
+                <div>
+                  <h3 class="font-bold text-white text-lg">E-Commerce Mobile App</h3>
+                  <p class="text-xs text-slate-400">Client: PT Mediatech</p>
+                </div>
+                <span class="px-3 py-1 bg-cyan-500/10 text-cyan-400 text-xs font-bold rounded-full">75% Done</span>
+              </div>
+              <div class="w-full bg-slate-800 rounded-full h-2">
+                <div class="bg-cyan-400 h-2 rounded-full" style="width: 75%"></div>
+              </div>
+              <p class="text-xs text-slate-400">Total Value: Rp 16.000.000 (4 Milestones)</p>
+            </div>
+
+            <div class="p-6 rounded-2xl bg-slate-900/60 border border-slate-800 space-y-4">
+              <div class="flex justify-between items-start">
+                <div>
+                  <h3 class="font-bold text-white text-lg">Laporan Keuangan Star Class</h3>
+                  <p class="text-xs text-slate-400">Client: Web Financial App</p>
+                </div>
+                <span class="px-3 py-1 bg-amber-500/10 text-amber-400 text-xs font-bold rounded-full">50% Done</span>
+              </div>
+              <div class="w-full bg-slate-800 rounded-full h-2">
+                <div class="bg-amber-400 h-2 rounded-full" style="width: 50%"></div>
+              </div>
+              <p class="text-xs text-slate-400">Total Value: Rp 5.000.000 (3 Milestones)</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3. MILESTONES TAB -->
+        <div id="tab-milestones" class="tab-content hidden space-y-6">
+          <h2 class="text-xl font-bold text-white">Milestone Invoicing Breakdown</h2>
+          <div class="p-6 rounded-2xl bg-slate-900/60 border border-slate-800 space-y-4">
+            <div class="p-4 rounded-xl bg-slate-950 border border-slate-800 space-y-2">
+              <div class="flex justify-between text-sm">
+                <span class="font-bold text-white">Phase 1: Wireframe & UI/UX Design</span>
+                <span class="text-emerald-400 font-bold">Paid - Rp 2.000.000</span>
+              </div>
+              <p class="text-xs text-slate-400">Figma prototype approved by client.</p>
+            </div>
+            <div class="p-4 rounded-xl bg-slate-950 border border-slate-800 space-y-2">
+              <div class="flex justify-between text-sm">
+                <span class="font-bold text-white">Phase 2: Database Schema & API Setup</span>
+                <span class="text-amber-400 font-bold">Awaiting QRIS Payout - Rp 4.000.000</span>
+              </div>
+              <p class="text-xs text-slate-400">PostgreSQL database deployed on Supabase.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- 4. INVOICES & QRIS TAB -->
+        <div id="tab-invoices" class="tab-content hidden space-y-6">
+          <h2 class="text-xl font-bold text-white">Invoices & Payment Gateway Status</h2>
+          <div class="p-6 rounded-2xl bg-slate-900/60 border border-slate-800">
+            <table class="w-full text-left text-sm text-slate-300">
+              <thead class="text-xs uppercase bg-slate-950 text-slate-400 border-b border-slate-800">
+                <tr>
+                  <th class="p-3">Invoice #</th>
+                  <th class="p-3">Client</th>
+                  <th class="p-3">Amount</th>
+                  <th class="p-3">Method</th>
+                  <th class="p-3">Status</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-slate-800">
+                <tr>
+                  <td class="p-3 font-mono text-cyan-400">#INV-001</td>
+                  <td class="p-3">PT Mediatech</td>
+                  <td class="p-3">Rp 4.000.000</td>
+                  <td class="p-3">QRIS Instant</td>
+                  <td class="p-3"><span class="px-2 py-1 bg-emerald-500/10 text-emerald-400 rounded text-xs">PAID</span></td>
+                </tr>
+                <tr>
+                  <td class="p-3 font-mono text-cyan-400">#INV-002</td>
+                  <td class="p-3">Star Class Admin</td>
+                  <td class="p-3">Rp 2.500.000</td>
+                  <td class="p-3">Virtual Account (VA)</td>
+                  <td class="p-3"><span class="px-2 py-1 bg-amber-500/10 text-amber-400 rounded text-xs">PENDING</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- 5. ESCROW VAULT TAB -->
+        <div id="tab-escrow" class="tab-content hidden space-y-6">
+          <h2 class="text-xl font-bold text-white">Escrow Deliverables Vault</h2>
+          <div class="p-6 rounded-2xl bg-slate-900/60 border border-slate-800 space-y-4">
+            <div class="flex items-center space-x-3 text-emerald-400">
+              <span class="text-3xl">🔒</span>
+              <div>
+                <h3 class="font-bold text-white">Source Code Protection Active</h3>
+                <p class="text-xs text-slate-400">Client receives download link automatically once final invoice is verified.</p>
+              </div>
+            </div>
+            <div class="p-4 rounded-xl bg-slate-950 border border-slate-800 text-xs space-y-2">
+              <p class="text-slate-300 font-semibold">Repository: github.com/jokikan/ecommerce-app</p>
+              <p class="text-slate-400">Status: Locked (Requires Milestone 4 Payment confirmation)</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- 6. CLIENTS TAB -->
+        <div id="tab-clients" class="tab-content hidden space-y-6">
+          <h2 class="text-xl font-bold text-white">Client Management</h2>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            <div class="p-5 rounded-2xl bg-slate-900/60 border border-slate-800 flex justify-between items-center">
+              <div>
+                <h3 class="font-bold text-white">PT Mediatech Indonesia</h3>
+                <p class="text-xs text-slate-400">2 Active Projects</p>
+              </div>
+              <span class="text-xs text-cyan-400 font-bold">Portal Active ↗</span>
+            </div>
+            <div class="p-5 rounded-2xl bg-slate-900/60 border border-slate-800 flex justify-between items-center">
+              <div>
+                <h3 class="font-bold text-white">Star Class Organization</h3>
+                <p class="text-xs text-slate-400">1 Active Project</p>
+              </div>
+              <span class="text-xs text-cyan-400 font-bold">Portal Active ↗</span>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <!-- Tab Switcher JavaScript -->
+    <script>
+      function switchTab(tabId, buttonEl) {
+        // Hide all tab content sections
+        const contents = document.querySelectorAll('.tab-content');
+        contents.forEach((el) => el.classList.add('hidden'));
+
+        // Show selected tab content
+        document.getElementById(tabId).classList.remove('hidden');
+
+        // Reset all navigation button styles
+        const navButtons = document.querySelectorAll('.nav-btn');
+        navButtons.forEach((btn) => {
+          btn.className = 'nav-btn w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800/60 text-left transition-all';
+        });
+
+        // Highlight clicked navigation button
+        buttonEl.className = 'nav-btn w-full flex items-center space-x-3 px-4 py-3 rounded-xl bg-cyan-500/10 text-cyan-400 font-semibold border border-cyan-500/20 text-left transition-all';
+
+        // Update page header title dynamically
+        const titles = {
+          'tab-dashboard': 'Agency Dashboard',
+          'tab-projects': 'Active Projects',
+          'tab-milestones': 'Project Milestones',
+          'tab-invoices': 'Invoices & QRIS Payment',
+          'tab-escrow': 'Escrow Deliverables Vault',
+          'tab-clients': 'Client Management',
+        };
+        document.getElementById('page-title').innerText = titles[tabId] || 'Agency Dashboard';
+      }
+    </script>
+  </body>
+</html>
